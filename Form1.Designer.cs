@@ -53,6 +53,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.worst_fit_rb = new System.Windows.Forms.RadioButton();
             this.best_fit_rb = new System.Windows.Forms.RadioButton();
             this.first_fit_rb = new System.Windows.Forms.RadioButton();
             this.finish_holes = new System.Windows.Forms.Button();
@@ -61,6 +62,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.delete_table = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
             this.ram.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.ram1.SuspendLayout();
@@ -104,6 +106,7 @@
             // 
             // hole_address_tb
             // 
+            this.hole_address_tb.Enabled = false;
             this.hole_address_tb.Location = new System.Drawing.Point(12, 126);
             this.hole_address_tb.Name = "hole_address_tb";
             this.hole_address_tb.Size = new System.Drawing.Size(100, 20);
@@ -120,6 +123,7 @@
             // 
             // hole_btn
             // 
+            this.hole_btn.Enabled = false;
             this.hole_btn.Location = new System.Drawing.Point(12, 191);
             this.hole_btn.Name = "hole_btn";
             this.hole_btn.Size = new System.Drawing.Size(75, 23);
@@ -130,6 +134,7 @@
             // 
             // hole_size_tb
             // 
+            this.hole_size_tb.Enabled = false;
             this.hole_size_tb.Location = new System.Drawing.Point(12, 165);
             this.hole_size_tb.Name = "hole_size_tb";
             this.hole_size_tb.Size = new System.Drawing.Size(100, 20);
@@ -183,6 +188,7 @@
             // 
             // number_of_segments_tb
             // 
+            this.number_of_segments_tb.Enabled = false;
             this.number_of_segments_tb.Location = new System.Drawing.Point(12, 282);
             this.number_of_segments_tb.Name = "number_of_segments_tb";
             this.number_of_segments_tb.Size = new System.Drawing.Size(100, 20);
@@ -217,6 +223,7 @@
             // 
             // number_of_segments_btn
             // 
+            this.number_of_segments_btn.Enabled = false;
             this.number_of_segments_btn.Location = new System.Drawing.Point(137, 281);
             this.number_of_segments_btn.Name = "number_of_segments_btn";
             this.number_of_segments_btn.Size = new System.Drawing.Size(75, 20);
@@ -227,11 +234,12 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 425);
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(299, 438);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 20;
-            this.button1.Text = "allocate 1 process";
+            this.button1.Text = "allocate ";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -244,7 +252,7 @@
             this.ram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.ram.Controls.Add(this.label6, 1, 0);
             this.ram.Controls.Add(this.label5, 0, 0);
-            this.ram.Location = new System.Drawing.Point(547, 110);
+            this.ram.Location = new System.Drawing.Point(599, 78);
             this.ram.Name = "ram";
             this.ram.RowCount = 1;
             this.ram.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -287,18 +295,30 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.worst_fit_rb);
             this.groupBox1.Controls.Add(this.best_fit_rb);
             this.groupBox1.Controls.Add(this.first_fit_rb);
-            this.groupBox1.Location = new System.Drawing.Point(137, 403);
+            this.groupBox1.Location = new System.Drawing.Point(12, 415);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 45);
+            this.groupBox1.Size = new System.Drawing.Size(260, 45);
             this.groupBox1.TabIndex = 28;
             this.groupBox1.TabStop = false;
+            // 
+            // worst_fit_rb
+            // 
+            this.worst_fit_rb.AutoSize = true;
+            this.worst_fit_rb.Location = new System.Drawing.Point(166, 23);
+            this.worst_fit_rb.Name = "worst_fit_rb";
+            this.worst_fit_rb.Size = new System.Drawing.Size(67, 17);
+            this.worst_fit_rb.TabIndex = 2;
+            this.worst_fit_rb.TabStop = true;
+            this.worst_fit_rb.Text = "Worst Fit";
+            this.worst_fit_rb.UseVisualStyleBackColor = true;
             // 
             // best_fit_rb
             // 
             this.best_fit_rb.AutoSize = true;
-            this.best_fit_rb.Location = new System.Drawing.Point(126, 23);
+            this.best_fit_rb.Location = new System.Drawing.Point(88, 23);
             this.best_fit_rb.Name = "best_fit_rb";
             this.best_fit_rb.Size = new System.Drawing.Size(60, 17);
             this.best_fit_rb.TabIndex = 1;
@@ -319,6 +339,7 @@
             // 
             // finish_holes
             // 
+            this.finish_holes.Enabled = false;
             this.finish_holes.Location = new System.Drawing.Point(100, 191);
             this.finish_holes.Name = "finish_holes";
             this.finish_holes.Size = new System.Drawing.Size(75, 23);
@@ -344,7 +365,7 @@
             this.ram1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.ram1.Controls.Add(this.label4, 1, 0);
             this.ram1.Controls.Add(this.label7, 0, 0);
-            this.ram1.Location = new System.Drawing.Point(289, 94);
+            this.ram1.Location = new System.Drawing.Point(352, 77);
             this.ram1.Name = "ram1";
             this.ram1.RowCount = 1;
             this.ram1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -371,20 +392,30 @@
             // 
             // delete_table
             // 
-            this.delete_table.Location = new System.Drawing.Point(348, 37);
+            this.delete_table.Location = new System.Drawing.Point(620, 386);
             this.delete_table.Name = "delete_table";
             this.delete_table.Size = new System.Drawing.Size(75, 23);
             this.delete_table.TabIndex = 32;
-            this.delete_table.Text = "delete_table";
+            this.delete_table.Text = "Reset";
             this.delete_table.UseVisualStyleBackColor = true;
             this.delete_table.Click += new System.EventHandler(this.delete_table_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(363, 37);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(165, 13);
+            this.label8.TabIndex = 33;
+            this.label8.Text = "Click on the process to dealocate";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(811, 464);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.delete_table);
             this.Controls.Add(this.ram1);
             this.Controls.Add(this.label2);
@@ -460,6 +491,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button delete_table;
+        private System.Windows.Forms.RadioButton worst_fit_rb;
+        private System.Windows.Forms.Label label8;
     }
 }
 

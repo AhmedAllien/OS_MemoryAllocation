@@ -65,6 +65,66 @@ namespace MemoryAllocation
          }
          */
 
+        private void check_adjacent_holes()
+        {
+            int counter = 0;
+            hole[] holes_sorted = new hole[holes_sorted_by_address.Count];
+            int i = 0;
+            foreach (hole h in holes_sorted_by_address)
+            {
+                holes_sorted[i] = h;
+
+
+                i++;
+            }
+            while (true)
+            {
+                counter = 0;
+               
+               
+
+                for(int j=0;j< holes_sorted_by_address.Count-1;j++)
+                {
+                    for (int k = j + 1; k < holes_sorted_by_address.Count ; k++)
+                    {
+                        if ((holes_sorted[j].Address>-1 && holes_sorted[k].Address > -1) && (holes_sorted[j].Size > 0 && holes_sorted[k].Size > 0) && holes_sorted[j].Address + holes_sorted[j].Size == holes_sorted[k].Address)
+                        {
+
+                            holes_sorted[j].Size += holes_sorted[k].Size;
+
+                            holes_sorted[k].Size = 0;
+                            holes_sorted[k].Address = -1;
+
+
+                            counter++;
+
+                        }
+
+
+                    }
+
+
+                }
+
+                if (counter == 0)
+                {
+                    
+                    holes_sorted_by_address.Clear();
+                    foreach (hole h in holes_sorted)
+                    {
+                        holes_sorted_by_address.AddLast(h);
+
+
+                        
+                    }
+
+                    break;
+
+                }
+
+            }
+
+        }
 
        private void delete(TableLayoutPanel t)
         {
@@ -124,6 +184,10 @@ namespace MemoryAllocation
                 t.RowStyles.Add(new RowStyle(temp.SizeType, 50));
                 t.Controls.Add(l, 1, t.RowCount - 1);
                 l.Text = h.Owner.Name + h.Name;
+                if(h.Name.Contains("hole"))
+                {
+                    l.Text = "hole";
+                }
                 if(h.Owner.Name!=""||h.Name.Contains("old process"))
                 l.Click += new EventHandler(this.label_Click);
                 if (h.Address == 0)
@@ -270,8 +334,19 @@ namespace MemoryAllocation
 
                   
                 }
-                l.Text = s.Name;
-              
+                //l.Text = s.Name;
+                check_adjacent_holes();
+                delete(ram1);
+                IEnumerable<hole> query1 = memory.OrderBy(h => h.Address);
+                foreach (hole h in query1)
+                {
+
+
+                    draw(h, ram1);
+
+
+
+                }
 
             }
             else if(s.Owner.Name != "")
@@ -297,9 +372,10 @@ namespace MemoryAllocation
 
 
                     }
-                    l.Text = segment.Name;
+                    //   l.Text = segment.Name;
+                   
                 }
-
+                check_adjacent_holes();
                 delete(ram1);
                 IEnumerable<hole> query = memory.OrderBy(h => h.Address);
                 foreach (hole h in query)
@@ -336,6 +412,13 @@ namespace MemoryAllocation
                 total_memory_size_tb.Text = "";
                 MessageBox.Show("Input must be a number!!!!!!!!");
             }
+
+            hole_size_tb.Enabled = true;
+            hole_address_tb.Enabled = true;
+            hole_btn.Enabled = true;
+            finish_holes.Enabled = true;
+            total_memory_size_tb.Enabled = false;
+            total_memory_size_btn.Enabled = false;
            
         }
 
@@ -344,7 +427,7 @@ namespace MemoryAllocation
             int i = 0;
             hole h = new hole();
             label3.Text = "";
-            if (Int64.TryParse(hole_address_tb.Text, out Int64 temp))
+            if (double.TryParse(hole_address_tb.Text, out double temp))
             {
                 if (holes.Count > 0)
                 {
@@ -386,6 +469,15 @@ namespace MemoryAllocation
                             MessageBox.Show("Invalid hole 3!!!!!!!!");
                             return;
                         }
+
+                        if (temp < x.Address && temp + temp1 > x.Address )
+                        {
+                            hole_address_tb.Text = "";
+                            hole_size_tb.Text = "";
+                            MessageBox.Show("Invalid hole 3.1!!!!!!!!");
+                            return;
+                        }
+
 
                     }
                 }
@@ -498,6 +590,7 @@ namespace MemoryAllocation
                 segments_enterd = 0;
                 number_of_segments_tb.Enabled = true;
                 number_of_segments_btn.Enabled = true;
+                button1.Enabled = true;
 
 
 
@@ -694,6 +787,167 @@ namespace MemoryAllocation
                                 h.Size -= s.Size;
                                 s.Hole_Occupied = h.Name;
 
+                                query1 = holes_sorted_by_address.OrderBy(m => m.Size);
+
+                                 i = 0;
+
+                                foreach (hole m in query1)
+                                {
+
+
+                                    temp_holes[i] = m;
+                                    i++;
+
+
+                                }
+
+
+                                break;
+                            }
+
+
+
+
+                        }
+
+                        if (s.Address == -1)
+                        {
+                            p.Fit = false;
+                            foreach (hole segment in p.segments)
+                            {
+                                if (segment.Hole_Occupied == "")
+                                    break;
+                                foreach (hole h in temp_holes)
+                                {
+
+                                    if (segment.Hole_Occupied == h.Name)
+                                    {
+                                        h.Address -= segment.Size;
+                                        h.Size += segment.Size;
+                                        s.Address = -1;
+                                        s.Hole_Occupied = "";
+
+
+                                        break;
+
+                                    }
+
+                                }
+
+
+
+
+                            }
+
+
+                            break;
+
+                        }
+
+
+                    }
+
+
+
+                }
+
+            }
+
+
+
+
+            foreach (hole h in temp_holes)
+            {
+
+                temp_memory.AddLast(h);
+            }
+            foreach (Process p in processes)
+            {
+                if (p.Fit == true && p.Allocated == false)
+                {
+
+                    foreach (hole s in p.segments)
+                    {
+
+                        memory.AddLast(s);
+
+                        p.Allocated = true;
+
+                    }
+
+
+                }
+
+            }
+
+            IEnumerable<hole> query = memory.OrderBy(h => h.Address);
+
+            foreach (hole h in query)
+            {
+
+
+                draw(h, ram1);
+
+
+
+            }
+
+
+
+        }
+
+
+
+        private void worst_fit()
+        {
+            hole[] temp_holes = new hole[holes_sorted_by_address.Count];
+            LinkedList<hole> temp_memory = new LinkedList<hole>();
+            IEnumerable<hole> query1 = holes_sorted_by_address.OrderBy(h => h.Size);
+
+            int i = holes_sorted_by_address.Count-1;
+
+            foreach (hole h in query1)
+            {
+
+
+                temp_holes[i] = h;
+                i--;
+
+
+            }
+
+            foreach (Process p in processes)
+            {
+                if (p.Allocated == false)
+                {
+
+                    foreach (hole s in p.segments)
+                    {
+
+
+                        foreach (hole h in temp_holes)
+                        {
+                            if (h.Size >= s.Size)
+                            {
+                                s.Address = h.Address;
+                                h.Address += s.Size;
+                                h.Size -= s.Size;
+                                s.Hole_Occupied = h.Name;
+
+                                query1 = holes_sorted_by_address.OrderBy(m => m.Size);
+
+                                i = holes_sorted_by_address.Count - 1;
+
+                                foreach (hole m in query1)
+                                {
+
+
+                                    temp_holes[i] = m;
+                                    i--;
+
+
+                                }
+
 
                                 break;
                             }
@@ -816,7 +1070,15 @@ namespace MemoryAllocation
 
 
             }
+            if (worst_fit_rb.Checked)
+            {
+                delete(ram1);
 
+
+                worst_fit();
+
+
+            }
 
             name_of_segment_tb.Enabled = false;
             size_of_sigment_tb.Enabled = false;
@@ -824,6 +1086,7 @@ namespace MemoryAllocation
             hole_address_tb.Enabled = false;
             hole_size_tb.Enabled = false;
             hole_btn.Enabled = false;
+            button1.Enabled = false;
 
         }
 
@@ -836,11 +1099,33 @@ namespace MemoryAllocation
         private void delete_table_Click(object sender, EventArgs e)
         {
             delete(ram1);
+            delete(ram);
+            holes.Clear();
+            holes_sorted_by_address.Clear();
+             old_processes.Clear();
+            processes.Clear();
+            memory.Clear();
+            current_process_no_segments = 0;
+            segments_enterd = 0;
+            globals.total_memory_size = 0;
+           total_memory_size_btn.Enabled = true;
+            total_memory_size_tb.Enabled = true;
+
+            hole_address_tb.Enabled = false;
+            hole_size_tb.Enabled = false;
+
+
         }
 
         private void finish_holes_Click(object sender, EventArgs e)
         {
             memory_init();
+            hole_size_tb.Enabled = false;
+            hole_address_tb.Enabled = false;
+            hole_btn.Enabled = false;
+            finish_holes.Enabled = false;
+            number_of_segments_btn.Enabled = true;
+            number_of_segments_tb.Enabled = true;
         }
     }
 }
